@@ -1,0 +1,15 @@
+body{
+    background-color:firebrick;
+}
+
+
+
+.jumbotron{
+    text-align: center;
+    background-image: url(../images/choo_choo.jpeg);
+    color: black;
+}
+
+#head{
+    font-size: 25px;
+}
