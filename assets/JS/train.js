@@ -42,19 +42,27 @@ $(document).ready(function(){
         console.log(newTrain.destination);
         console.log(newTrain.time);
         console.log(newTrain.frequency);
-            
+  
         var trainRow = $('<tr>');
-    //----------------------------------------------
+
         var trainName = $('<td>');
         var trainDestination = $('<td>');
         var trainTime = $('<td>');
         var trainFrequency = $('<td>');
         var trainMin = $('<td>');
     
-        trainName.text(newTrain.name);
-        trainDestination.text(newTrain.destination);
-        trainTime.text(newTrain.time);
-        trainFrequency.text(newTrain.frequency);
+    //----------------------------------------------
+
+        var newName = newTrain.name;
+        var newDest = newTrain.destination;
+        var newTime = newTrain.time;
+        var newFreq = parseInt(newTrain.frequency)
+
+
+        trainName.text(newName);
+        trainDestination.text(newDest);
+        trainTime.text(newTime);
+        trainFrequency.text(newFreq);
         trainMin.text(tMinToTrain);
     
          
@@ -67,15 +75,15 @@ $(document).ready(function(){
     
         var currentTime = moment();
         console.log("The current time is: " + moment(currentTime).format("hh:mm"));
-        var timeConvert = moment(trainTime, "hh:mm").subtract(1, "years");
+        var timeConvert = moment(newTime, "hh:mm").subtract(1, "years");
         console.log(timeConvert);
         var diffTime = moment().diff(moment(timeConvert), "minutes");
-        var tRemainder = diffTime % trainFrequency;
+        var tRemainder = diffTime % newFreq;
         console.log(tRemainder);
-        var tMinToTrain = trainFrequency - tRemainder;
+        var tMinToTrain = newFreq - tRemainder;
         console.log("Minutes until next train: " + tMinToTrain);
-        var nextTrain = currentTime.add(tMinToTrain, "minute");
-        console.log("Time to next train: " + trainMin);
+        var newTrainMin = currentTime.add(tMinToTrain, "minute");
+        console.log("Time to next train: " + newTrainMin);
     
         $('#train-display').append(trainRow);   
     
