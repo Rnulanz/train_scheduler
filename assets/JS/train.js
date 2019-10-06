@@ -25,8 +25,8 @@ $(document).ready(function(){
         var trainInfo = {
             name: $("#trainName-input").val().trim(),
             destination: $("#destination-input").val().trim(),
-            time: $("#time-input").val().trim(),
-            frequency: $("#frequency-input").val().trim(),
+            time: $('#hours').val() + ":" + $('#minutes').val(),
+            frequency: $("#frequency-input").val(),
         }
     
         database.ref('train/').push(trainInfo)
@@ -56,14 +56,26 @@ $(document).ready(function(){
         var newName = newTrain.name;
         var newDest = newTrain.destination;
         var newTime = newTrain.time;
-        var newFreq = parseInt(newTrain.frequency)
+        var newFreq = newTrain.frequency
 
+        var trainFirstMoment = moment(newTime, "HH:mm A");
+        var differenceInMs = moment().diff(trainFirstMoment);
+
+        var trainNextMoment = trainFirstMoment;
+
+        if (differenceInMs > 0) {
+            var remaining = (newFreq * 60000) - (differenceInMs % (newFreq * 60000));
+            trainNextMoment = moment().add(remaining);
+        }
+
+        var trainArrivalTime = trainNextMoment.format("HH:mm");
+        var minutesAway = Math.ceil(trainNextMoment.diff(moment()) / 60000);
 
         trainName.text(newName);
         trainDestination.text(newDest);
-        trainTime.text(newTime);
+        trainTime.text(trainArrivalTime);
         trainFrequency.text(newFreq);
-        trainMin.text(tMinToTrain);
+        trainMin.text(minutesAway);
     
          
     
@@ -73,17 +85,6 @@ $(document).ready(function(){
         trainRow.append(trainFrequency);
         trainRow.append(trainMin);
     
-        var currentTime = moment();
-        console.log("The current time is: " + moment(currentTime).format("hh:mm"));
-        var timeConvert = moment(newTime, "hh:mm").subtract(1, "years");
-        console.log(timeConvert);
-        var diffTime = moment().diff(moment(timeConvert), "minutes");
-        var tRemainder = diffTime % newFreq;
-        console.log(tRemainder);
-        var tMinToTrain = newFreq - tRemainder;
-        console.log("Minutes until next train: " + tMinToTrain);
-        var newTrainMin = currentTime.add(tMinToTrain, "minute");
-        console.log("Time to next train: " + newTrainMin);
     
         $('#train-display').append(trainRow);   
     
